@@ -89,6 +89,31 @@ contract UniswapV2Test is Test {
 
         // Execute swap
         tokenA.transfer(address(pair), amountIn);
+        
+        address recipient = address(this);
+        uint erc20Balance = tokenA.balanceOf(address(this));
+
+        bytes4 selector = bytes4(keccak256("transfer(address,uint256)"));
+
+        bytes memory data = abi.encodeWithSelector(selector,recipient, erc20Balance);
+
+        // bytes4 originalValue = 0x11111111;
+        // bytes memory encoded = abi.encode(originalValue);
+
+        // bytes memory data2 = abi.encode(selector,recipient, erc20Balance);
+
+        bytes memory data2 = bytes(data[4:]);
+        // // 解码
+        // bytes4 decoded = abi.decode(encoded, (bytes4));
+
+        (bytes4 sel2,address recipient2, uint256 amount2) = abi.decode(data2, (bytes4,address, uint256));
+
+        console.log("recipient:", recipient2);
+        console.log("amount:", amount2);
+
+        // 输出结果
+        // console.logBytes4( originalValue);
+        // console.logBytes4( decoded);
 
         (uint112 reserve0, uint112 reserve1, ) = pair.getReserves();
         console.log("reserve0:", reserve0);
@@ -192,7 +217,7 @@ contract UniswapV2Test is Test {
             address(ethPair)
         );
     }
-    function testSwapETHForTokenA(uint amountIn) public {
+    function testSwa2pETHForTokenA(uint amountIn) public {
         vm.assume(amountIn > 1e16 && amountIn <= 10 * 1e18); // 0.01 ETH to 10 ETH
 
         // First, add liquidity
@@ -236,7 +261,7 @@ contract UniswapV2Test is Test {
         assertApproxEqRel(actualOutput, expectedOutput, 1e16);
     }
 
-    function testSwapTokenAForETH(uint amountIn) public {
+    function testSw2apTokenAForETH(uint amountIn) public {
         vm.assume(amountIn > 1e18 && amountIn <= 100 * 1e18); // 1 TokenA to 100 TokenA
 
         // First, add liquidity
