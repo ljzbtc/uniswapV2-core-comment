@@ -8,7 +8,14 @@ out/
 /broadcast/**/dry-run/
 
 # Docs
-docs/
+
 
 # Dotenv file
 .env
+
+# Node modules
+lib
+cache
+out
+test
+script
